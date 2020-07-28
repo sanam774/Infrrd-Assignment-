@@ -14,13 +14,13 @@ import lombok.Setter;
 @Data
 public class DataProcessingResponseDTO {
 	
-   // @ApiModelProperty(name = "error", value = "error", required = false, dataType = "String", example = "xxxx")
+   @ApiModelProperty(name = "error", value = "error", required = false, dataType = "String", example = "xxxx")
 	private String error;
     
-   // @ApiModelProperty(name = "data", value = "data", required = false, dataType = "String", example = "xxxx")
+   @ApiModelProperty(name = "data", value = "data", required = false, dataType = "String", example = "xxxx")
 	private String data;
     
-   // @ApiModelProperty(name = "dataSet", value = "dataSet", required = false, dataType = "Set", example ="123,456,789")
+   @ApiModelProperty(name = "dataSet", value = "dataSet", required = false, dataType = "Set", example ="123,456,789")
 	private Set<Integer> dataSet;
 
 	public String getError() {

@@ -1,6 +1,8 @@
 package com.example.sanampreet;
-import org.apache.commons.logging.Log;
+
+
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +22,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/sanam")
 public class DataProcessingController {
 	
-    
+    Logger logger = LoggerFactory.getLogger(DataProcessingController.class);
+
     @Autowired
     DataProcessingService  dataprocessingService;
     
@@ -34,13 +37,13 @@ public class DataProcessingController {
     public  DataProcessingResponseDTO  startApi(@RequestBody DataProcessingRequestModel requestModel)
     {
     	
-    	//Logger.info("Entering start Api mehod of data processing controller");
+    	logger.info("Entering start Api mehod of data processing controller");
     	DataProcessingResponseDTO response = new DataProcessingResponseDTO ();
     	 
     	try
     	{
     	dataprocessingService.startApiService(requestModel);
-		//Logger.info("Data processing started successfully"  + "for"+ " "+ requestModel.getUuid());
+		logger.info("Data processing started successfully"  + "for"+ " "+ requestModel.getUuid());
 		response.setData("Data processing" +  requestModel.getUuid() + "started");
 		
 
@@ -48,13 +51,13 @@ public class DataProcessingController {
     	catch(DataProcessingExceptionHandler ex)
     	{
     		
-    		//Logger.info("exception occured while starting data processing"+" "+requestModel.getUuid()+ "  "+ "Data already in process by other thread");
+    		logger.info("exception occured while starting data processing"+" "+requestModel.getUuid()+ "  "+ "Data already in process by other thread");
     		response.setError(ex.getMessage());
     		response.setData(ex.getMessage());
     		
     	} 
     	
-    	//Logger.info("existing start Api method of data processing controller");
+    	logger.info("existing start Api method of data processing controller");
 
     	return response;
     	
@@ -69,7 +72,7 @@ public class DataProcessingController {
     @GetMapping(value = "/stopDataprocessing")
     public  DataProcessingResponseDTO  EndApi(@RequestParam Integer UUID)
     {
-    	//log.debug("entering End Api method of data processing controller");
+    	logger.debug("entering End Api method of data processing controller");
 
     	
     	DataProcessingResponseDTO response = new DataProcessingResponseDTO ();
@@ -77,7 +80,7 @@ public class DataProcessingController {
     	try
     	{
    String message = 	dataprocessingService.stopApiService(UUID);
-	//Logger.info(" Successfully stopped  data processing for the "+" "+UUID);
+	logger.info(" Successfully stopped  data processing for the "+" "+UUID);
 
 		response.setData(message);
 		
@@ -86,13 +89,13 @@ public class DataProcessingController {
     	catch( DataProcessingExceptionHandler ex)
     	{
     		
-    		//log.info("exception occured while stopping data processing"+" "+UUID+ "  "+ "processing already terminated by other thread");
+    		logger.info("exception occured while stopping data processing"+" "+UUID+ "  "+ "processing already terminated by other thread");
     		response.setError(ex.getMessage());
     		response.setData(ex.getMessage());
     		
     	} 	
     	
-    	//log.debug("exiting end  Api method of data processing controller");
+    	logger.debug("exiting end  Api method of data processing controller");
 
     	return response;
     	
@@ -107,13 +110,13 @@ public class DataProcessingController {
     @GetMapping(value ="/getProceesedids")
     public DataProcessingResponseDTO  getAllProcessedIds()
     {
-   //log.debug("entering getAllProcessedIds method of data processing controller");
+   logger.debug("entering getAllProcessedIds method of data processing controller");
 
    DataProcessingResponseDTO  response = new  DataProcessingResponseDTO();
 
     	response.setDataSet(dataprocessingService.getAllProcessedMessageIds());
     	
-    //log.debug("exiting getAllProcessedIds method of data processing controller");
+    logger.debug("exiting getAllProcessedIds method of data processing controller");
 
     	return response;
     	

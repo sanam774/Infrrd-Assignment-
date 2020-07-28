@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Logger;
-import org.apache.commons.logging.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class DataProcessingService {
 	
+    Logger logger = LoggerFactory.getLogger(DataProcessingService.class);
+
 	//map to store the  unique requestIds 
     private  Map<Integer , Boolean >  dataPresentCheckerMap  = new HashMap<>();
     // Set to store the request ids fully processed (started and stopped)
@@ -25,7 +27,7 @@ public class DataProcessingService {
     // 2- else it throws an exception with custom message and response code
     public void  startApiService( DataProcessingRequestModel requestModel) 
     {
-    	//Logger.debug("entering  startApiService method of data processing Service");
+    	logger.debug("entering  startApiService method of data processing Service");
     	if(checkIfRequestNotUnderprocessing(requestModel.getUuid()))
     	{
     		///Logger.debug("Validation passed  for data not already being proceesed andData processing starts");
@@ -33,7 +35,7 @@ public class DataProcessingService {
     	}
     	else
     	{
-    		//Logger.debug(" invalid request as  data already being proceesed by other thread" + requestModel.getUuid() );
+    		logger.debug(" invalid request as  data already being proceesed by other thread" + requestModel.getUuid() );
 
     		String message = "request Invalid for" + requestModel.getUuid() + "already underprocess";
 
@@ -41,7 +43,7 @@ public class DataProcessingService {
   		
     	}
  	
-    	//Log.debug("exiting startApiService method of data processing Service");
+    	logger.debug("exiting startApiService method of data processing Service");
 	
     }
     
@@ -53,13 +55,13 @@ public class DataProcessingService {
     // 2- else it throws an exception with custom message and response code
     public String  stopApiService(Integer requestId)
     {
-    	//log.debug("entering  stopApiService method of data processing Service");
+    	logger.debug("entering  stopApiService method of data processing Service");
 	
     	if(checkIfRequestNotAlreadyStopped(requestId))
     	{	
    		String message = "processing of request with "+ requestId + "stopped";
    		
-   		//log.debug(message);  
+   		logger.debug(message);  
    		
    	return  message;
    	
@@ -68,7 +70,7 @@ public class DataProcessingService {
     	{
     		String message = "processing of request with "+ requestId + "alreadyDisruptedByOtherThread";
     		
-        	//log.info(message);
+        	logger.info(message);
         	
         	 throw new  DataProcessingExceptionHandler(message);
     	}	
@@ -147,12 +149,12 @@ public class DataProcessingService {
 		while(dataPresentCheckerMap.get(UIID) !=null)
 		{	
 			
-		//log.info("Thread processing data with"  + UIID);
-        // log.info(requestModel.getData());		
+		logger.info("Thread processing data with"  + UIID);
+         logger.info(requestModel.getData());		
 		}
 		
 		processedRequestids.add(UIID);
-		//log.info("Thread processing data with"  + UIID + "completes");
+		logger.info("Thread processing data with"  + UIID + "completes");
 		
 	}
 	
